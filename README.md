@@ -1,69 +1,89 @@
-# CineAPI — Frontend
+<div align="center">
 
-> Tu universo cinematográfico. Frontend Angular 22 para la plataforma CineAPI.
+# 🎬 CineAPI — Frontend
+
+### Angular 22 client for the CineAPI movie platform
+
+[![Angular](https://img.shields.io/badge/Angular-22-red?style=flat-square&logo=angular)](https://angular.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
+[![RxJS](https://img.shields.io/badge/RxJS-7.8-pink?style=flat-square&logo=reactivex)](https://rxjs.dev/)
+[![zone.js](https://img.shields.io/badge/zone.js-0.16-lightgrey?style=flat-square)](https://github.com/angular/angular/tree/main/packages/zone.js)
+
+</div>
+
+---
 
 ![CineAPI Screenshot](docs/screenshot.png)
 
 ---
 
-## Sobre el proyecto
+## 📖 About
 
-CineAPI Frontend es la interfaz web de la plataforma **CineAPI**, un catálogo de películas con sistema de votación y reseñas. Está construido con **Angular 22** y consume la API REST del [backend CineAPI](https://github.com/EstebanMM13/CineAPI) desarrollado con Spring Cloud.
+CineAPI Frontend is the web client for the **CineAPI** platform — a movie catalogue with ratings and reviews. Built with **Angular 22** standalone components, it consumes the REST API provided by the [CineAPI backend](https://github.com/EstebanMM13/CineAPI), a Spring Cloud microservices application.
 
-### Funcionalidades
-
-- Búsqueda de películas en tiempo real
-- Filtrado por género desde la navbar
-- Detalle de película con descripción, rating y géneros
-- Sistema de votación (1–10) para usuarios autenticados
-- Reseñas por película — crear, leer y eliminar
-- Autenticación con JWT (login y registro)
-- Panel de administración para gestionar películas, géneros y usuarios
-- Diseño premium dark con acento dorado
+The app uses **RxJS** for all async data flows, **JWT** tokens stored in localStorage for authentication, and a manual `ChangeDetectorRef` strategy to work reliably with Angular 22's zoneless-by-default environment.
 
 ---
 
-## Stack
+## ✨ Features
 
-| Tecnología | Versión |
+- Real-time movie search with live navigation
+- Genre filtering via navbar dropdown
+- Movie detail page with backdrop, description and rating
+- 1–10 voting system for authenticated users
+- Movie reviews — create, read and delete
+- JWT authentication — login and register
+- Admin panel to manage movies, genres and users
+- Premium dark UI with amber gold accent
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
 |---|---|
-| Angular | 22 |
-| TypeScript | 6 |
-| Tailwind CSS | 4 |
-| RxJS | 7.8 |
-| zone.js | 0.16 |
+| Framework | Angular 22 (standalone components) |
+| Language | TypeScript 6 |
+| Styling | Tailwind CSS 4 + inline styles |
+| Async | RxJS 7.8 (switchMap, distinctUntilChanged, takeUntil) |
+| Change Detection | ChangeDetectorRef (manual, zoneless-compatible) |
+| HTTP | Angular HttpClient + JWT interceptor |
+| Routing | Angular Router with lazy-loaded components |
+| Auth | JWT stored in localStorage, decoded client-side |
+| Build | Angular CLI 22 + Vite (esbuild) |
 
 ---
 
-## Requisitos
+## 🚀 Quick Start
+
+### Requirements
 
 - Node.js 20+
 - npm 11+
-- El [backend CineAPI](https://github.com/EstebanMM13/CineAPI) corriendo en `localhost:8060`
+- [CineAPI backend](https://github.com/EstebanMM13/CineAPI) running on `localhost:8060`
 
----
-
-## Instalación y arranque
+### Run locally
 
 ```bash
-# Clonar el repo
+# Clone the repo
 git clone https://github.com/EstebanMM13/CineAPI-Frontend.git
 cd CineAPI-Frontend
 
-# Instalar dependencias
+# Install dependencies
 npm install
 
-# Arrancar en desarrollo
+# Start dev server
 npm start
 ```
 
-La app estará disponible en `http://localhost:4200`.
+The app will be available at `http://localhost:4200`.
 
 ---
 
-## Variables de entorno
+## ⚙️ Environment
 
-El archivo `src/environments/environment.ts` contiene la URL base de la API:
+The API base URL is configured in `src/environments/environment.ts`:
 
 ```typescript
 export const environment = {
@@ -71,47 +91,84 @@ export const environment = {
 };
 ```
 
-Cambia `apiUrl` si el backend corre en otro puerto o host.
+Change `apiUrl` if the backend runs on a different port or host.
 
 ---
 
-## Scripts
-
-| Comando | Descripción |
-|---|---|
-| `npm start` | Servidor de desarrollo |
-| `npm run build` | Build de producción |
-| `npm run watch` | Build en modo watch |
-
----
-
-## Estructura del proyecto
+## 📁 Project Structure
 
 ```
 src/
 ├── app/
 │   ├── core/
-│   │   ├── guards/        # Auth y admin guards
-│   │   ├── interceptors/  # JWT interceptor
-│   │   ├── models/        # Interfaces TypeScript
-│   │   └── services/      # Movie, Genre, Review, Auth
+│   │   ├── guards/          # Auth and admin route guards
+│   │   ├── interceptors/    # JWT Bearer token interceptor
+│   │   ├── models/          # TypeScript interfaces (Movie, Genre, Review...)
+│   │   └── services/        # MovieService, GenreService, ReviewService, AuthService
 │   ├── features/
-│   │   ├── admin/         # Panel de administración
-│   │   ├── auth/          # Login y registro
-│   │   ├── home/          # Catálogo principal
-│   │   └── movie-detail/  # Detalle de película
+│   │   ├── admin/           # Admin panel (movies, genres, users)
+│   │   ├── auth/            # Login and register pages
+│   │   ├── home/            # Main catalogue with search and genre filter
+│   │   └── movie-detail/    # Movie page with voting and reviews
 │   └── shared/
-│       ├── movie-card/    # Tarjeta de película
-│       ├── navbar/        # Navegación principal
-│       └── pagination/    # Paginación
+│       ├── movie-card/      # Reusable movie poster card
+│       ├── navbar/          # Sticky top navigation with genre dropdown
+│       └── pagination/      # Page controls
 ├── environments/
-└── styles.css
+└── styles.css               # Tailwind v4 + global theme
 ```
 
 ---
 
-## Backend relacionado
+## 🔐 Authentication
 
-Este frontend está diseñado para funcionar con **CineAPI**, un backend de microservicios con Spring Cloud (Gateway, Eureka, Config Server).
+Login returns a **JWT token** which is stored in localStorage and attached to every subsequent request via an `HttpInterceptor`. The token payload contains `userId`, `username` and `role` — decoded client-side to determine access levels without an extra request.
 
-→ [Ver repositorio del backend](https://github.com/EstebanMM13/CineAPI)
+```
+POST /api/v1/auth/authenticate  →  { token: "eyJhbGci..." }
+                                          ↓
+                              localStorage.setItem('token', ...)
+                                          ↓
+                    Authorization: Bearer eyJhbGci...  (all requests)
+```
+
+---
+
+## 📡 API consumed
+
+This app talks to the [CineAPI backend](https://github.com/EstebanMM13/CineAPI) through the API Gateway at port `8060`.
+
+| Service | Endpoints used |
+|---|---|
+| Auth | `POST /auth/register`, `POST /auth/authenticate` |
+| Movies | `GET /movies`, `GET /movies/{id}`, `GET /movies/title`, `GET /movies/genre/{name}`, `PUT /movies/{id}/vote/{rating}` |
+| Reviews | `GET /movies/{id}/reviews`, `POST /movies/{id}/reviews`, `DELETE /movies/{id}/reviews/{reviewId}` |
+| Genres | `GET /genres` |
+| Admin | `POST/PUT/DELETE /movies`, `POST/DELETE /genres`, `GET/DELETE /users` |
+
+---
+
+## 🗺️ Roadmap
+
+- [x] JWT authentication (login + register)
+- [x] Movie catalogue with pagination
+- [x] Real-time search and genre filtering
+- [x] Movie detail with voting system
+- [x] Reviews (create + delete)
+- [x] Admin panel
+- [x] Premium dark UI with gold accent
+- [ ] Watchlist / favourites
+- [ ] User profile page
+- [ ] TMDB integration for automatic posters
+
+---
+
+## 🔗 Related
+
+→ [CineAPI Backend](https://github.com/EstebanMM13/CineAPI) — Spring Cloud microservices REST API
+
+---
+
+## 👨‍💻 Author
+
+**Esteban** — [@EstebanMM13](https://github.com/EstebanMM13)
