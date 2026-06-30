@@ -1,52 +1,94 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
+import { GenreService } from '../../core/services/genre.service';
+import { Genre } from '../../core/models/models';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
+  styles: [`
+    .nav-input { background:#0f0f0f; border:1px solid #1e1e1e; outline:none; color:#e8e8e8; border-radius:10px; padding:8px 12px 8px 38px; font-size:13px; width:100%; transition:border-color 0.2s; }
+    .nav-input:focus { border-color:rgba(212,160,23,0.4); }
+    .genre-item { display:block; width:100%; text-align:left; padding:9px 16px; font-size:13px; background:transparent; border:none; cursor:pointer; transition:background 0.15s,color 0.15s; color:#666; }
+    .genre-item:hover { color:#e8e8e8; background:rgba(255,255,255,0.04); }
+    .genre-item.active { color:#D4A017; background:rgba(212,160,23,0.07); }
+    .nav-btn { background:transparent; border:1px solid #1e1e1e; color:#666; border-radius:8px; padding:7px 12px; font-size:13px; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all 0.2s; }
+    .nav-btn:hover { color:#e8e8e8; border-color:#333; }
+    .nav-btn.active { color:#D4A017; border-color:rgba(212,160,23,0.3); background:rgba(212,160,23,0.07); }
+  `],
   template: `
-    <nav class="sticky top-0 z-50 border-b" style="background:#0a0a0a;border-color:#2a2a2a;">
-      <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-6">
+    <nav style="background:#080808;border-bottom:1px solid rgba(212,160,23,0.1);position:sticky;top:0;z-index:50;">
+      <div style="max-width:1280px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;gap:16px;">
 
-        <a routerLink="/" class="flex items-center gap-2 shrink-0">
-          <span class="text-xl font-bold" style="color:#e50914;">&#9654;</span>
-          <span class="text-lg font-bold text-white tracking-tight">CineAPI</span>
+        <!-- Logo -->
+        <a routerLink="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4A017" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="2"/>
+            <line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/>
+            <line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/>
+            <line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/>
+          </svg>
+          <span style="font-size:16px;font-weight:700;letter-spacing:-0.3px;">
+            <span style="color:#fff;">Cine</span><span style="color:#D4A017;">API</span>
+          </span>
         </a>
 
-        <div class="flex-1 max-w-md">
-          <div class="relative">
-            <input
-              type="text"
-              placeholder="Buscar películas..."
-              [(ngModel)]="searchQuery"
-              (keyup.enter)="search()"
-              class="w-full px-4 py-2 rounded-lg text-sm text-white outline-none"
-              style="background:#1a1a1a;border:1px solid #2a2a2a;"
-            />
-            <button (click)="search()" class="absolute right-3 top-2.5" style="color:#888;">
-              &#128269;
-            </button>
+        <!-- Search -->
+        <div style="flex:1;max-width:420px;position:relative;">
+          <svg style="position:absolute;left:11px;top:50%;transform:translateY(-50%);pointer-events:none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            type="text"
+            placeholder="Buscar películas..."
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="search()"
+            class="nav-input"
+            style="padding-right:40px;"
+          />
+          <button (click)="search()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(212,160,23,0.12);border:none;border-radius:6px;padding:5px 8px;cursor:pointer;display:flex;align-items:center;transition:background 0.2s;" onmouseover="this.style.background='rgba(212,160,23,0.22)'" onmouseout="this.style.background='rgba(212,160,23,0.12)'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D4A017" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Spacer -->
+        <div style="flex:1;"></div>
+
+        <!-- Genre dropdown -->
+        <div style="position:relative;">
+          <button class="nav-btn" [class.active]="genreOpen || activeGenre" (click)="toggleGenres($event)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            {{ activeGenre || 'Géneros' }}
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" [style.transform]="genreOpen ? 'rotate(180deg)' : 'rotate(0)'" style="transition:transform 0.2s;">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+
+          <div *ngIf="genreOpen" style="position:absolute;right:0;top:calc(100% + 8px);background:#0f0f0f;border:1px solid rgba(212,160,23,0.15);border-radius:12px;box-shadow:0 24px 48px rgba(0,0,0,0.8);min-width:200px;z-index:100;overflow:hidden;padding:6px 0;">
+            <button class="genre-item" [class.active]="!activeGenre" (click)="selectGenre(null)">Todos los géneros</button>
+            <div style="height:1px;background:rgba(255,255,255,0.05);margin:4px 0;"></div>
+            <button *ngFor="let g of genres" class="genre-item" [class.active]="activeGenre === g.name" (click)="selectGenre(g.name)">{{ g.name }}</button>
           </div>
         </div>
 
-        <div class="ml-auto flex items-center gap-4">
-          <ng-container *ngIf="isLoggedIn; else guestLinks">
-            <span *ngIf="isAdmin" class="text-xs font-semibold px-2 py-1 rounded" style="background:#e50914;color:#fff;">ADMIN</span>
-            <a *ngIf="isAdmin" routerLink="/admin" class="text-sm hover:text-white transition-colors" style="color:#888;">Panel admin</a>
-            <span class="text-sm" style="color:#888;">{{ username }}</span>
-            <button (click)="logout()" class="text-sm px-3 py-1.5 rounded border transition-colors hover:text-white" style="color:#888;border-color:#2a2a2a;">
-              Salir
-            </button>
-          </ng-container>
-          <ng-template #guestLinks>
-            <a routerLink="/login" class="text-sm transition-colors hover:text-white" style="color:#888;">Iniciar sesión</a>
-            <a routerLink="/register" class="text-sm px-3 py-1.5 rounded font-medium transition-colors" style="background:#e50914;color:#fff;">Registrarse</a>
-          </ng-template>
-        </div>
+        <!-- Auth -->
+        <ng-container *ngIf="isLoggedIn; else guestLinks">
+          <span *ngIf="isAdmin" style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;background:rgba(212,160,23,0.1);color:#D4A017;border:1px solid rgba(212,160,23,0.25);">ADMIN</span>
+          <a *ngIf="isAdmin" routerLink="/admin" style="font-size:13px;color:#555;text-decoration:none;">Panel</a>
+          <span style="font-size:13px;color:#555;">{{ username }}</span>
+          <button (click)="logout()" class="nav-btn">Salir</button>
+        </ng-container>
+        <ng-template #guestLinks>
+          <a routerLink="/login" style="font-size:13px;color:#666;text-decoration:none;">Iniciar sesión</a>
+          <a routerLink="/register" style="font-size:13px;font-weight:600;padding:8px 16px;border-radius:8px;background:#D4A017;color:#080808;text-decoration:none;">Registrarse</a>
+        </ng-template>
+
       </div>
     </nav>
   `,
@@ -56,24 +98,57 @@ export class NavbarComponent implements OnInit {
   isAdmin = false;
   username: string | null = null;
   searchQuery = '';
+  genreOpen = false;
+  activeGenre: string | null = null;
+  genres: Genre[] = [];
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private genreService: GenreService,
+    private cdr: ChangeDetectorRef,
+    private el: ElementRef
+  ) {}
 
   ngOnInit(): void {
     this.auth.isLoggedIn$().subscribe((v) => {
       this.isLoggedIn = v;
       this.isAdmin = this.auth.isAdmin();
       this.username = this.auth.getUsername();
+      this.cdr.detectChanges();
+    });
+    this.genreService.getAll().subscribe({
+      next: (page) => { this.genres = page.content; this.cdr.detectChanges(); },
+    });
+    this.route.queryParams.subscribe((params) => {
+      this.searchQuery = params['q'] ?? '';
+      this.activeGenre = params['genre'] ?? null;
+      this.cdr.detectChanges();
     });
   }
 
-  search(): void {
-    if (this.searchQuery.trim()) {
-      this.router.navigate(['/'], { queryParams: { q: this.searchQuery.trim() } });
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.el.nativeElement.contains(event.target)) {
+      if (this.genreOpen) { this.genreOpen = false; this.cdr.detectChanges(); }
     }
   }
 
-  logout(): void {
-    this.auth.logout();
+  toggleGenres(event: MouseEvent): void {
+    event.stopPropagation();
+    this.genreOpen = !this.genreOpen;
   }
+
+  selectGenre(name: string | null): void {
+    this.genreOpen = false;
+    this.router.navigate(['/'], { queryParams: name ? { genre: name } : {} });
+  }
+
+  search(): void {
+    const q = this.searchQuery.trim();
+    if (q) this.router.navigate(['/'], { queryParams: { q } });
+  }
+
+  logout(): void { this.auth.logout(); }
 }

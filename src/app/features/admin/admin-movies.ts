@@ -37,6 +37,10 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
           <div class="col-span-2">
             <label class="block text-xs mb-1" style="color:#888;">URL imagen (póster)</label>
             <input [(ngModel)]="form.imageUrl" class="w-full px-3 py-2 rounded text-sm text-white" style="background:#111;border:1px solid #2a2a2a;" />
+            <div *ngIf="form.imageUrl" class="mt-2 flex items-center gap-3">
+              <img [src]="form.imageUrl" alt="Preview" class="h-20 rounded object-cover" style="aspect-ratio:2/3;" (error)="imgPreviewError=true" />
+              <span *ngIf="imgPreviewError" class="text-xs" style="color:#888;">No se puede cargar la imagen</span>
+            </div>
           </div>
           <div class="col-span-2">
             <label class="block text-xs mb-2" style="color:#888;">Géneros</label>
@@ -72,7 +76,7 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let m of movies" style="border-top:1px solid #2a2a2a;">
+            <tr *ngFor="let m of movies" class="transition-colors hover:bg-[#1f1f1f]" style="border-top:1px solid #2a2a2a;">
               <td class="px-4 py-3 text-white font-medium">{{ m.title }}</td>
               <td class="px-4 py-3" style="color:#888;">{{ m.movieYear }}</td>
               <td class="px-4 py-3" style="color:#f5c518;">&#9733; {{ m.rating | number:'1.1-1' }}</td>
@@ -101,6 +105,7 @@ export class AdminMoviesComponent implements OnInit {
   totalPages = 0;
 
   form: MovieRequest = { title: '', description: '', movieYear: new Date().getFullYear(), imageUrl: '', genreIds: [] };
+  imgPreviewError = false;
 
   constructor(private movieService: MovieService, private genreService: GenreService) {}
 
@@ -120,12 +125,14 @@ export class AdminMoviesComponent implements OnInit {
   openCreate(): void {
     this.editing = null;
     this.form = { title: '', description: '', movieYear: new Date().getFullYear(), imageUrl: '', genreIds: [] };
+    this.imgPreviewError = false;
     this.showForm = true;
   }
 
   openEdit(m: Movie): void {
     this.editing = m;
     this.form = { title: m.title, description: m.description, movieYear: m.movieYear, imageUrl: m.imageUrl, genreIds: m.genres.map((g) => g.id) };
+    this.imgPreviewError = false;
     this.showForm = true;
   }
 

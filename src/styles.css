@@ -3,41 +3,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @theme {
-  --color-cinema-bg: #0a0a0a;
-  --color-cinema-card: #1a1a1a;
-  --color-cinema-border: #2a2a2a;
-  --color-cinema-red: #e50914;
-  --color-cinema-red-hover: #f40612;
-  --color-cinema-gold: #f5c518;
-  --color-cinema-text: #e5e5e5;
-  --color-cinema-muted: #888888;
+  --color-cinema-bg: #080808;
+  --color-cinema-surface: #0f0f0f;
+  --color-cinema-card: #141414;
+  --color-cinema-border: #1e1e1e;
+  --color-cinema-gold: #D4A017;
+  --color-cinema-gold-dim: rgba(212,160,23,0.15);
+  --color-cinema-text: #e8e8e8;
+  --color-cinema-muted: #555;
   --font-family-sans: 'Inter', sans-serif;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
-  background-color: #0a0a0a;
-  color: #e5e5e5;
+  background-color: #080808;
+  color: #e8e8e8;
   font-family: 'Inter', sans-serif;
   margin: 0;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #0f0f0f; }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #D4A017; }
 
-::-webkit-scrollbar-track {
-  background: #1a1a1a;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #444;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #e50914;
-}
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }

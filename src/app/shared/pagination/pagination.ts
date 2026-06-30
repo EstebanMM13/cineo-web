@@ -10,9 +10,11 @@ import { CommonModule } from '@angular/common';
       <button
         (click)="changePage(currentPage - 1)"
         [disabled]="currentPage === 0"
-        class="px-3 py-1.5 rounded text-sm disabled:opacity-30 transition-colors"
+        class="px-3 py-2 rounded text-sm disabled:opacity-30 transition-colors hover:border-white/20"
         style="background:#1a1a1a;color:#e5e5e5;border:1px solid #2a2a2a;"
-      >&#8592;</button>
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
 
       <ng-container *ngFor="let p of pages">
         <button
@@ -26,9 +28,11 @@ import { CommonModule } from '@angular/common';
       <button
         (click)="changePage(currentPage + 1)"
         [disabled]="currentPage === totalPages - 1"
-        class="px-3 py-1.5 rounded text-sm disabled:opacity-30 transition-colors"
+        class="px-3 py-2 rounded text-sm disabled:opacity-30 transition-colors hover:border-white/20"
         style="background:#1a1a1a;color:#e5e5e5;border:1px solid #2a2a2a;"
-      >&#8594;</button>
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
     </div>
   `,
 })

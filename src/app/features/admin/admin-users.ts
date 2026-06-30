@@ -11,17 +11,17 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
   template: `
     <div>
       <div *ngIf="stats" class="grid grid-cols-3 gap-4 mb-8">
-        <div class="p-4 rounded-lg text-center" style="background:#1a1a1a;border:1px solid #2a2a2a;">
-          <p class="text-2xl font-bold text-white">{{ stats.totalUsers }}</p>
-          <p class="text-xs mt-1" style="color:#888;">Total usuarios</p>
+        <div class="p-5 rounded-lg text-center" style="background:#1a1a1a;border:1px solid #2a2a2a;border-top:2px solid #e5e5e5;">
+          <p class="text-3xl font-bold text-white">{{ stats.totalUsers }}</p>
+          <p class="text-xs mt-2 uppercase tracking-widest" style="color:#666;">Total usuarios</p>
         </div>
-        <div class="p-4 rounded-lg text-center" style="background:#1a1a1a;border:1px solid #2a2a2a;">
-          <p class="text-2xl font-bold" style="color:#e50914;">{{ stats.adminUsers }}</p>
-          <p class="text-xs mt-1" style="color:#888;">Administradores</p>
+        <div class="p-5 rounded-lg text-center" style="background:#1a1a1a;border:1px solid #2a2a2a;border-top:2px solid #e50914;">
+          <p class="text-3xl font-bold" style="color:#e50914;">{{ stats.adminUsers }}</p>
+          <p class="text-xs mt-2 uppercase tracking-widest" style="color:#666;">Administradores</p>
         </div>
-        <div class="p-4 rounded-lg text-center" style="background:#1a1a1a;border:1px solid #2a2a2a;">
-          <p class="text-2xl font-bold" style="color:#f5c518;">{{ stats.regularUsers }}</p>
-          <p class="text-xs mt-1" style="color:#888;">Usuarios regulares</p>
+        <div class="p-5 rounded-lg text-center" style="background:#1a1a1a;border:1px solid #2a2a2a;border-top:2px solid #f5c518;">
+          <p class="text-3xl font-bold" style="color:#f5c518;">{{ stats.regularUsers }}</p>
+          <p class="text-xs mt-2 uppercase tracking-widest" style="color:#666;">Usuarios regulares</p>
         </div>
       </div>
 
@@ -41,7 +41,7 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let u of users" style="border-top:1px solid #2a2a2a;">
+            <tr *ngFor="let u of users" class="transition-colors hover:bg-[#1f1f1f]" style="border-top:1px solid #2a2a2a;">
               <td class="px-4 py-3" style="color:#888;">{{ u.id }}</td>
               <td class="px-4 py-3 text-white">{{ u.username }}</td>
               <td class="px-4 py-3" style="color:#888;">{{ u.email }}</td>

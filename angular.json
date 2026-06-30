@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "2323a822-be8c-4beb-999c-dcc46618c1c5"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -48,6 +49,9 @@
                 "glob": "**/*",
                 "input": "public"
               }
+            ],
+            "polyfills": [
+              "zone.js"
             ],
             "styles": [
               "src/styles.css"

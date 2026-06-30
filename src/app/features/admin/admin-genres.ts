@@ -28,7 +28,7 @@ import { Genre } from '../../core/models/models';
       </div>
 
       <div class="flex flex-col gap-2">
-        <div *ngFor="let g of genres" class="flex items-center gap-3 px-4 py-3 rounded-lg" style="background:#1a1a1a;border:1px solid #2a2a2a;">
+        <div *ngFor="let g of genres" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors hover:bg-[#1f1f1f]" style="background:#1a1a1a;border:1px solid #2a2a2a;">
           <span *ngIf="editingId !== g.id" class="flex-1 text-sm text-white">{{ g.name }}</span>
           <input *ngIf="editingId === g.id" [(ngModel)]="editName" (keyup.enter)="saveEdit(g)"
             class="flex-1 px-2 py-1 rounded text-sm text-white" style="background:#111;border:1px solid #e50914;" />
