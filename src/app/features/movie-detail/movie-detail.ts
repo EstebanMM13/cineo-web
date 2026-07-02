@@ -2,9 +2,11 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { MovieService } from '../../core/services/movie.service';
 import { ReviewService } from '../../core/services/review.service';
 import { AuthService } from '../../core/services/auth.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { Movie, Review } from '../../core/models/models';
 
 @Component({
@@ -92,6 +94,7 @@ import { Movie, Review } from '../../core/models/models';
                     *ngFor="let n of voteNumbers"
                     class="vote-btn"
                     [class.active]="hoverRating >= n"
+                    [attr.aria-label]="'Votar ' + n + ' sobre 10'"
                     (click)="vote(n)"
                     (mouseenter)="hoverRating = n"
                     (mouseleave)="hoverRating = 0"
@@ -187,6 +190,7 @@ export class MovieDetailComponent implements OnInit {
     private movieService: MovieService,
     private reviewService: ReviewService,
     private auth: AuthService,
+    private notifications: NotificationService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -197,6 +201,11 @@ export class MovieDetailComponent implements OnInit {
       next: (m) => { this.movie = m; this.loading = false; this.cdr.detectChanges(); },
       error: () => { this.loading = false; this.cdr.detectChanges(); },
     });
+    if (this.isLoggedIn) {
+      this.movieService.getVoteStatus(id).subscribe({
+        next: (voted) => { this.hasVoted = voted; this.cdr.detectChanges(); },
+      });
+    }
     this.loadReviews(id);
   }
 
@@ -223,6 +232,15 @@ export class MovieDetailComponent implements OnInit {
     if (!this.movie) return;
     this.movieService.vote(this.movie.id, rating).subscribe({
       next: (m) => { this.movie = m; this.hasVoted = true; this.cdr.detectChanges(); },
+      error: (err: HttpErrorResponse) => {
+        if (err.status === 409) {
+          this.hasVoted = true;
+          this.notifications.info('Ya has votado esta película.');
+        } else {
+          this.notifications.error('No se ha podido registrar tu voto.');
+        }
+        this.cdr.detectChanges();
+      },
     });
   }
 
@@ -237,7 +255,13 @@ export class MovieDetailComponent implements OnInit {
         this.submitting = false;
         this.cdr.detectChanges();
       },
-      error: () => { this.submitting = false; this.cdr.detectChanges(); },
+      error: (err: HttpErrorResponse) => {
+        this.submitting = false;
+        this.notifications.error(
+          err.status === 409 ? 'Ya has escrito una reseña para esta película.' : 'No se ha podido publicar la reseña.'
+        );
+        this.cdr.detectChanges();
+      },
     });
   }
 

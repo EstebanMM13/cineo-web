@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Movie, MovieRequest, Page } from '../models/models';
+import { withSkipErrorNotification } from '../interceptors/error.interceptor';
 
 @Injectable({ providedIn: 'root' })
 export class MovieService {
@@ -30,7 +31,11 @@ export class MovieService {
   }
 
   vote(movieId: number, rating: number): Observable<Movie> {
-    return this.http.put<Movie>(`${this.base}/${movieId}/vote/${rating}`, {});
+    return this.http.put<Movie>(`${this.base}/${movieId}/vote/${rating}`, {}, { context: withSkipErrorNotification() });
+  }
+
+  getVoteStatus(movieId: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.base}/${movieId}/vote/status`);
   }
 
   create(movie: MovieRequest): Observable<Movie> {

@@ -15,18 +15,18 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
           <p class="text-3xl font-bold text-white">{{ stats.totalUsers }}</p>
           <p class="text-xs mt-2 uppercase tracking-widest" style="color:#666;">Total usuarios</p>
         </div>
-        <div class="p-5 rounded-lg text-center" style="background:#1a1a1a;border:1px solid #2a2a2a;border-top:2px solid #e50914;">
-          <p class="text-3xl font-bold" style="color:#e50914;">{{ stats.adminUsers }}</p>
+        <div class="p-5 rounded-lg text-center" style="background:#1a1a1a;border:1px solid #2a2a2a;border-top:2px solid #D4A017;">
+          <p class="text-3xl font-bold" style="color:#D4A017;">{{ stats.adminUsers }}</p>
           <p class="text-xs mt-2 uppercase tracking-widest" style="color:#666;">Administradores</p>
         </div>
-        <div class="p-5 rounded-lg text-center" style="background:#1a1a1a;border:1px solid #2a2a2a;border-top:2px solid #f5c518;">
-          <p class="text-3xl font-bold" style="color:#f5c518;">{{ stats.regularUsers }}</p>
+        <div class="p-5 rounded-lg text-center" style="background:#1a1a1a;border:1px solid #2a2a2a;border-top:2px solid #4a9;">
+          <p class="text-3xl font-bold" style="color:#4a9;">{{ stats.regularUsers }}</p>
           <p class="text-xs mt-2 uppercase tracking-widest" style="color:#666;">Usuarios regulares</p>
         </div>
       </div>
 
       <div *ngIf="loading" class="flex justify-center py-8">
-        <div class="animate-spin rounded-full h-8 w-8 border-2" style="border-color:#e50914;border-top-color:transparent;"></div>
+        <div class="animate-spin rounded-full h-8 w-8 border-2" style="border-color:#D4A017;border-top-color:transparent;"></div>
       </div>
 
       <div *ngIf="!loading" class="rounded-lg overflow-hidden" style="border:1px solid #2a2a2a;">
@@ -47,7 +47,7 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
               <td class="px-4 py-3" style="color:#888;">{{ u.email }}</td>
               <td class="px-4 py-3">
                 <span class="text-xs px-2 py-0.5 rounded font-medium"
-                  [style]="u.role === 'ADMIN' ? 'background:#3a1010;color:#e50914;' : 'background:#1a2a1a;color:#4a9;'">
+                  [style]="u.role === 'ADMIN' ? 'background:rgba(212,160,23,0.1);color:#D4A017;' : 'background:#1a2a1a;color:#4a9;'">
                   {{ u.role }}
                 </span>
               </td>

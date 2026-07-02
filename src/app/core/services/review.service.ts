@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Page, Review, ReviewRequest } from '../models/models';
+import { withSkipErrorNotification } from '../interceptors/error.interceptor';
 
 @Injectable({ providedIn: 'root' })
 export class ReviewService {
@@ -16,7 +17,7 @@ export class ReviewService {
   }
 
   create(movieId: number, body: ReviewRequest): Observable<Review> {
-    return this.http.post<Review>(`${this.base}/${movieId}/reviews`, body);
+    return this.http.post<Review>(`${this.base}/${movieId}/reviews`, body, { context: withSkipErrorNotification() });
   }
 
   update(movieId: number, reviewId: number, body: ReviewRequest): Observable<Review> {

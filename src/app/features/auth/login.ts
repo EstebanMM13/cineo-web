@@ -2,6 +2,7 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth.service';
 
 const FILM_BG = `background-color:#080808;background-image:url("data:image/svg+xml,%3Csvg width='60' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='4' y='10' width='10' height='14' rx='2' fill='%23D4A017' fill-opacity='0.055'/%3E%3Crect x='46' y='10' width='10' height='14' rx='2' fill='%23D4A017' fill-opacity='0.055'/%3E%3C/svg%3E");background-size:60px 40px;`;
@@ -86,7 +87,13 @@ export class LoginComponent {
     this.error = '';
     this.auth.login({ username: this.username, password: this.password }).subscribe({
       next: () => this.router.navigate(['/']),
-      error: () => { this.error = 'Usuario o contraseña incorrectos.'; this.loading = false; this.cdr.detectChanges(); },
+      error: (err: HttpErrorResponse) => {
+        this.error = err.status === 0
+          ? 'No se ha podido contactar con el servidor.'
+          : 'Usuario o contraseña incorrectos.';
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
     });
   }
 }

@@ -2,9 +2,16 @@ import { Component, OnInit, HostListener, ElementRef, ChangeDetectorRef } from '
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Observable, catchError, map, of } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { GenreService } from '../../core/services/genre.service';
 import { Genre } from '../../core/models/models';
+
+interface AuthState {
+  isLoggedIn: boolean;
+  isAdmin: boolean;
+  username: string | null;
+}
 
 @Component({
   selector: 'app-navbar',
@@ -19,6 +26,8 @@ import { Genre } from '../../core/models/models';
     .nav-btn { background:transparent; border:1px solid #1e1e1e; color:#666; border-radius:8px; padding:7px 12px; font-size:13px; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all 0.2s; }
     .nav-btn:hover { color:#e8e8e8; border-color:#333; }
     .nav-btn.active { color:#D4A017; border-color:rgba(212,160,23,0.3); background:rgba(212,160,23,0.07); }
+    .search-btn { position:absolute; right:8px; top:50%; transform:translateY(-50%); background:rgba(212,160,23,0.12); border:none; border-radius:6px; padding:5px 8px; cursor:pointer; display:flex; align-items:center; transition:background 0.2s; }
+    .search-btn:hover { background:rgba(212,160,23,0.22); }
   `],
   template: `
     <nav style="background:#080808;border-bottom:1px solid rgba(212,160,23,0.1);position:sticky;top:0;z-index:50;">
@@ -50,7 +59,7 @@ import { Genre } from '../../core/models/models';
             class="nav-input"
             style="padding-right:40px;"
           />
-          <button (click)="search()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(212,160,23,0.12);border:none;border-radius:6px;padding:5px 8px;cursor:pointer;display:flex;align-items:center;transition:background 0.2s;" onmouseover="this.style.background='rgba(212,160,23,0.22)'" onmouseout="this.style.background='rgba(212,160,23,0.12)'">
+          <button (click)="search()" class="search-btn" aria-label="Buscar">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D4A017" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
@@ -62,7 +71,7 @@ import { Genre } from '../../core/models/models';
 
         <!-- Genre dropdown -->
         <div style="position:relative;">
-          <button class="nav-btn" [class.active]="genreOpen || activeGenre" (click)="toggleGenres($event)">
+          <button class="nav-btn" [class.active]="genreOpen || activeGenre" (click)="toggleGenres($event)" aria-haspopup="true" [attr.aria-expanded]="genreOpen">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
             {{ activeGenre || 'Géneros' }}
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" [style.transform]="genreOpen ? 'rotate(180deg)' : 'rotate(0)'" style="transition:transform 0.2s;">
@@ -73,54 +82,61 @@ import { Genre } from '../../core/models/models';
           <div *ngIf="genreOpen" style="position:absolute;right:0;top:calc(100% + 8px);background:#0f0f0f;border:1px solid rgba(212,160,23,0.15);border-radius:12px;box-shadow:0 24px 48px rgba(0,0,0,0.8);min-width:200px;z-index:100;overflow:hidden;padding:6px 0;">
             <button class="genre-item" [class.active]="!activeGenre" (click)="selectGenre(null)">Todos los géneros</button>
             <div style="height:1px;background:rgba(255,255,255,0.05);margin:4px 0;"></div>
-            <button *ngFor="let g of genres" class="genre-item" [class.active]="activeGenre === g.name" (click)="selectGenre(g.name)">{{ g.name }}</button>
+            <button *ngFor="let g of genres$ | async" class="genre-item" [class.active]="activeGenre === g.name" (click)="selectGenre(g.name)">{{ g.name }}</button>
           </div>
         </div>
 
         <!-- Auth -->
-        <ng-container *ngIf="isLoggedIn; else guestLinks">
-          <span *ngIf="isAdmin" style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;background:rgba(212,160,23,0.1);color:#D4A017;border:1px solid rgba(212,160,23,0.25);">ADMIN</span>
-          <a *ngIf="isAdmin" routerLink="/admin" style="font-size:13px;color:#555;text-decoration:none;">Panel</a>
-          <span style="font-size:13px;color:#555;">{{ username }}</span>
-          <button (click)="logout()" class="nav-btn">Salir</button>
+        <ng-container *ngIf="authState$ | async as auth">
+          <ng-container *ngIf="auth.isLoggedIn; else guestLinks">
+            <span *ngIf="auth.isAdmin" style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;background:rgba(212,160,23,0.1);color:#D4A017;border:1px solid rgba(212,160,23,0.25);">ADMIN</span>
+            <a *ngIf="auth.isAdmin" routerLink="/admin" style="font-size:13px;color:#555;text-decoration:none;">Panel</a>
+            <span style="font-size:13px;color:#555;">{{ auth.username }}</span>
+            <button (click)="logout()" class="nav-btn">Salir</button>
+          </ng-container>
+          <ng-template #guestLinks>
+            <a routerLink="/login" style="font-size:13px;color:#666;text-decoration:none;">Iniciar sesión</a>
+            <a routerLink="/register" style="font-size:13px;font-weight:600;padding:8px 16px;border-radius:8px;background:#D4A017;color:#080808;text-decoration:none;">Registrarse</a>
+          </ng-template>
         </ng-container>
-        <ng-template #guestLinks>
-          <a routerLink="/login" style="font-size:13px;color:#666;text-decoration:none;">Iniciar sesión</a>
-          <a routerLink="/register" style="font-size:13px;font-weight:600;padding:8px 16px;border-radius:8px;background:#D4A017;color:#080808;text-decoration:none;">Registrarse</a>
-        </ng-template>
 
       </div>
     </nav>
   `,
 })
 export class NavbarComponent implements OnInit {
-  isLoggedIn = false;
-  isAdmin = false;
-  username: string | null = null;
+  readonly authState$: Observable<AuthState>;
+  readonly genres$: Observable<Genre[]>;
+
   searchQuery = '';
   genreOpen = false;
   activeGenre: string | null = null;
-  genres: Genre[] = [];
 
   constructor(
     private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
     private genreService: GenreService,
-    private cdr: ChangeDetectorRef,
-    private el: ElementRef
-  ) {}
+    private el: ElementRef,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.authState$ = this.auth.isLoggedIn$().pipe(
+      map((isLoggedIn): AuthState => ({
+        isLoggedIn,
+        isAdmin: isLoggedIn ? this.auth.isAdmin() : false,
+        username: isLoggedIn ? this.auth.getUsername() : null,
+      }))
+    );
+
+    this.genres$ = this.genreService.getAll().pipe(
+      map((page) => page.content),
+      catchError(() => of([] as Genre[]))
+    );
+  }
 
   ngOnInit(): void {
-    this.auth.isLoggedIn$().subscribe((v) => {
-      this.isLoggedIn = v;
-      this.isAdmin = this.auth.isAdmin();
-      this.username = this.auth.getUsername();
-      this.cdr.detectChanges();
-    });
-    this.genreService.getAll().subscribe({
-      next: (page) => { this.genres = page.content; this.cdr.detectChanges(); },
-    });
+    // searchQuery/activeGenre feed a two-way ngModel binding, so they need to stay
+    // as plain mutable fields rather than values read from an async-piped observable.
     this.route.queryParams.subscribe((params) => {
       this.searchQuery = params['q'] ?? '';
       this.activeGenre = params['genre'] ?? null;
@@ -131,8 +147,13 @@ export class NavbarComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (!this.el.nativeElement.contains(event.target)) {
-      if (this.genreOpen) { this.genreOpen = false; this.cdr.detectChanges(); }
+      this.genreOpen = false;
     }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.genreOpen = false;
   }
 
   toggleGenres(event: MouseEvent): void {

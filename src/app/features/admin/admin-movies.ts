@@ -14,7 +14,7 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
     <div>
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-lg font-semibold text-white">Películas</h2>
-        <button (click)="openCreate()" class="px-4 py-2 rounded text-sm font-medium" style="background:#e50914;color:#fff;">
+        <button (click)="openCreate()" class="px-4 py-2 rounded text-sm font-medium" style="background:#D4A017;color:#080808;">
           + Nueva película
         </button>
       </div>
@@ -53,7 +53,7 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
           </div>
         </div>
         <div class="flex gap-2 mt-4">
-          <button (click)="save()" [disabled]="saving" class="px-4 py-2 rounded text-sm font-medium disabled:opacity-40" style="background:#e50914;color:#fff;">
+          <button (click)="save()" [disabled]="saving" class="px-4 py-2 rounded text-sm font-medium disabled:opacity-40" style="background:#D4A017;color:#080808;">
             {{ saving ? 'Guardando...' : 'Guardar' }}
           </button>
           <button (click)="showForm = false" class="px-4 py-2 rounded text-sm" style="background:#2a2a2a;color:#888;">Cancelar</button>
@@ -61,7 +61,7 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
       </div>
 
       <div *ngIf="loading" class="flex justify-center py-8">
-        <div class="animate-spin rounded-full h-8 w-8 border-2" style="border-color:#e50914;border-top-color:transparent;"></div>
+        <div class="animate-spin rounded-full h-8 w-8 border-2" style="border-color:#D4A017;border-top-color:transparent;"></div>
       </div>
 
       <div *ngIf="!loading" class="rounded-lg overflow-hidden" style="border:1px solid #2a2a2a;">
@@ -79,7 +79,7 @@ import { PaginationComponent } from '../../shared/pagination/pagination';
             <tr *ngFor="let m of movies" class="transition-colors hover:bg-[#1f1f1f]" style="border-top:1px solid #2a2a2a;">
               <td class="px-4 py-3 text-white font-medium">{{ m.title }}</td>
               <td class="px-4 py-3" style="color:#888;">{{ m.movieYear }}</td>
-              <td class="px-4 py-3" style="color:#f5c518;">&#9733; {{ m.rating | number:'1.1-1' }}</td>
+              <td class="px-4 py-3" style="color:#D4A017;">&#9733; {{ m.rating | number:'1.1-1' }}</td>
               <td class="px-4 py-3" style="color:#888;">{{ m.votes }}</td>
               <td class="px-4 py-3 flex gap-2 justify-end">
                 <button (click)="openEdit(m)" class="text-xs px-2 py-1 rounded transition-colors" style="background:#2a2a2a;color:#ccc;">Editar</button>
