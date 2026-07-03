@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "cineapi-frontend": {
+    "cineo-web": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:class": {
@@ -91,10 +91,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "cineapi-frontend:build:production"
+              "buildTarget": "cineo-web:build:production"
             },
             "development": {
-              "buildTarget": "cineapi-frontend:build:development"
+              "buildTarget": "cineo-web:build:development"
             }
           },
           "defaultConfiguration": "development"

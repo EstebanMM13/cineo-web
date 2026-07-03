@@ -7,7 +7,7 @@ import { AuthRequest, AuthResponse, DecodedToken } from '../models/models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly TOKEN_KEY = 'cineapi_token';
+  private readonly TOKEN_KEY = 'cineo_token';
   private loggedIn$ = new BehaviorSubject<boolean>(this.hasValidToken());
 
   constructor(private http: HttpClient, private router: Router) {}

@@ -22,7 +22,7 @@ import { Genre } from '../../core/models/models';
           style="background:#1a1a1a;border:1px solid #2a2a2a;"
           (keyup.enter)="create()"
         />
-        <button (click)="create()" [disabled]="!newName.trim() || saving" class="px-4 py-2 rounded text-sm font-medium disabled:opacity-40" style="background:#D4A017;color:#080808;">
+        <button (click)="create()" [disabled]="!newName.trim() || saving" class="px-4 py-2 rounded text-sm font-medium disabled:opacity-40" style="background:var(--color-cinema-gold);color:var(--color-cinema-bg);">
           Añadir
         </button>
       </div>
@@ -31,10 +31,10 @@ import { Genre } from '../../core/models/models';
         <div *ngFor="let g of genres" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors hover:bg-[#1f1f1f]" style="background:#1a1a1a;border:1px solid #2a2a2a;">
           <span *ngIf="editingId !== g.id" class="flex-1 text-sm text-white">{{ g.name }}</span>
           <input *ngIf="editingId === g.id" [(ngModel)]="editName" (keyup.enter)="saveEdit(g)"
-            class="flex-1 px-2 py-1 rounded text-sm text-white" style="background:#111;border:1px solid #D4A017;" />
+            class="flex-1 px-2 py-1 rounded text-sm text-white" style="background:#111;border:1px solid var(--color-cinema-gold);" />
           <div class="flex gap-2">
             <button *ngIf="editingId !== g.id" (click)="startEdit(g)" class="text-xs px-2 py-1 rounded" style="background:#2a2a2a;color:#ccc;">Editar</button>
-            <button *ngIf="editingId === g.id" (click)="saveEdit(g)" class="text-xs px-2 py-1 rounded" style="background:#D4A017;color:#080808;">Guardar</button>
+            <button *ngIf="editingId === g.id" (click)="saveEdit(g)" class="text-xs px-2 py-1 rounded" style="background:var(--color-cinema-gold);color:var(--color-cinema-bg);">Guardar</button>
             <button *ngIf="editingId === g.id" (click)="editingId = null" class="text-xs px-2 py-1 rounded" style="background:#2a2a2a;color:#888;">Cancelar</button>
             <button *ngIf="editingId !== g.id" (click)="remove(g)" class="text-xs px-2 py-1 rounded" style="background:#3a1a1a;color:#ff6b6b;">Eliminar</button>
           </div>

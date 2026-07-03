@@ -35,7 +35,7 @@ export class MovieService {
   }
 
   getVoteStatus(movieId: number): Observable<boolean> {
-    return this.http.get<boolean>(`${this.base}/${movieId}/vote/status`);
+    return this.http.get<boolean>(`${this.base}/${movieId}/voted`);
   }
 
   create(movie: MovieRequest): Observable<Movie> {

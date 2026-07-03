@@ -41,7 +41,7 @@ describe('AuthService', () => {
       userId: 42,
       exp: Math.floor(Date.now() / 1000) + 3600,
     });
-    localStorage.setItem('cineapi_token', token);
+    localStorage.setItem('cineo_token', token);
 
     expect(service.isLoggedIn()).toBe(true);
     expect(service.getUsername()).toBe('esteban');
@@ -56,17 +56,17 @@ describe('AuthService', () => {
       userId: 1,
       exp: Math.floor(Date.now() / 1000) - 3600,
     });
-    localStorage.setItem('cineapi_token', token);
+    localStorage.setItem('cineo_token', token);
 
     expect(service.isLoggedIn()).toBe(false);
   });
 
   it('logout clears the token and navigates to the given path', () => {
-    localStorage.setItem('cineapi_token', fakeToken({ sub: 'x', role: 'USER', userId: 1, exp: 9999999999 }));
+    localStorage.setItem('cineo_token', fakeToken({ sub: 'x', role: 'USER', userId: 1, exp: 9999999999 }));
 
     service.logout('/login');
 
-    expect(localStorage.getItem('cineapi_token')).toBeNull();
+    expect(localStorage.getItem('cineo_token')).toBeNull();
     expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
 });

@@ -1,6 +1,6 @@
 {
-  "name": "cineapi-frontend",
-  "description": "Frontend for CineAPI — Tu universo cinematográfico",
+  "name": "cineo-web",
+  "description": "Frontend for Cineo — Tu universo cinematográfico",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

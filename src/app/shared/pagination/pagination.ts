@@ -21,7 +21,7 @@ import { CommonModule } from '@angular/common';
           (click)="changePage(p)"
           [class.text-white]="p === currentPage"
           class="px-3 py-1.5 rounded text-sm transition-colors"
-          [style]="p === currentPage ? 'background:#D4A017;color:#080808;border:1px solid #D4A017;' : 'background:#1a1a1a;color:#888;border:1px solid #2a2a2a;'"
+          [style]="p === currentPage ? 'background:var(--color-cinema-gold);color:var(--color-cinema-bg);border:1px solid var(--color-cinema-gold);' : 'background:#1a1a1a;color:#888;border:1px solid #2a2a2a;'"
         >{{ p + 1 }}</button>
       </ng-container>
 

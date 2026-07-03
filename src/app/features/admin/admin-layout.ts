@@ -11,13 +11,13 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       <div class="flex gap-2 mb-8 border-b" style="border-color:#2a2a2a;">
         <a routerLink="movies" routerLinkActive="border-b-2 !text-white"
            class="pb-3 px-3 text-sm font-medium transition-all duration-200 hover:text-white/70"
-           style="border-color:#D4A017;color:#666;">Películas</a>
+           style="border-color:var(--color-cinema-gold);color:#666;">Películas</a>
         <a routerLink="genres" routerLinkActive="border-b-2 !text-white"
            class="pb-3 px-3 text-sm font-medium transition-all duration-200 hover:text-white/70"
-           style="border-color:#D4A017;color:#666;">Géneros</a>
+           style="border-color:var(--color-cinema-gold);color:#666;">Géneros</a>
         <a routerLink="users" routerLinkActive="border-b-2 !text-white"
            class="pb-3 px-3 text-sm font-medium transition-all duration-200 hover:text-white/70"
-           style="border-color:#D4A017;color:#666;">Usuarios</a>
+           style="border-color:var(--color-cinema-gold);color:#666;">Usuarios</a>
       </div>
       <router-outlet />
     </div>

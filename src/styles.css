@@ -17,16 +17,36 @@
 * { box-sizing: border-box; }
 
 body {
-  background-color: #080808;
-  color: #e8e8e8;
+  background-color: var(--color-cinema-bg);
+  color: var(--color-cinema-text);
   font-family: 'Inter', sans-serif;
   margin: 0;
 }
 
 ::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #0f0f0f; }
+::-webkit-scrollbar-track { background: var(--color-cinema-surface); }
 ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #D4A017; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-cinema-gold); }
 
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
+
+/* Skeleton shimmer — used by home and movie-detail */
+.skeleton {
+  background: linear-gradient(90deg, #111 25%, #1c1c1c 50%, #111 75%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0%   { background-position: 100% 50%; }
+  100% { background-position:   0% 50%; }
+}
+
+/* Fade-in for page content */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fade-in 0.25s ease-out both; }
