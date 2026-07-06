@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🎬 CineAPI — Frontend
+# 🎬 Cineo Web
 
-### Angular 22 client for the CineAPI movie platform
+### Angular 22 client for the Cineo movie platform
 
 [![Angular](https://img.shields.io/badge/Angular-22-red?style=flat-square&logo=angular)](https://angular.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
@@ -14,15 +14,11 @@
 
 ---
 
-![CineAPI Screenshot](docs/screenshot.png)
-
----
-
 ## 📖 About
 
-CineAPI Frontend is the web client for the **CineAPI** platform — a movie catalogue with ratings and reviews. Built with **Angular 22** standalone components, it consumes the REST API provided by the [CineAPI backend](https://github.com/EstebanMM13/CineAPI), a Spring Cloud microservices application.
+Cineo Web is the web client for **Cineo** — a movie catalogue with ratings and reviews. Built with **Angular 22** standalone components, it consumes the REST API provided by [cineo-api](https://github.com/EstebanMM13/cineo-api), a Spring Cloud microservices backend.
 
-The app uses **RxJS** for all async data flows, **JWT** tokens stored in localStorage for authentication, and a manual `ChangeDetectorRef` strategy to work reliably with Angular 22's zoneless-by-default environment.
+The app uses **RxJS** for async data flows, **Angular Signals** for local component state, and **JWT** tokens stored in localStorage for authentication.
 
 ---
 
@@ -47,7 +43,7 @@ The app uses **RxJS** for all async data flows, **JWT** tokens stored in localSt
 | Language | TypeScript 6 |
 | Styling | Tailwind CSS 4 + inline styles |
 | Async | RxJS 7.8 (switchMap, distinctUntilChanged, takeUntil) |
-| Change Detection | ChangeDetectorRef (manual, zoneless-compatible) |
+| State management | Angular Signals (`signal`, `toSignal`) |
 | HTTP | Angular HttpClient + JWT interceptor |
 | Routing | Angular Router with lazy-loaded components |
 | Auth | JWT stored in localStorage, decoded client-side |
@@ -61,14 +57,14 @@ The app uses **RxJS** for all async data flows, **JWT** tokens stored in localSt
 
 - Node.js 20+
 - npm 11+
-- [CineAPI backend](https://github.com/EstebanMM13/CineAPI) running on `localhost:8060`
+- [cineo-api](https://github.com/EstebanMM13/cineo-api) running on `localhost:8060`
 
 ### Run locally
 
 ```bash
 # Clone the repo
-git clone https://github.com/EstebanMM13/CineAPI-Frontend.git
-cd CineAPI-Frontend
+git clone https://github.com/EstebanMM13/cineo-web.git
+cd cineo-web
 
 # Install dependencies
 npm install
@@ -92,6 +88,12 @@ export const environment = {
 ```
 
 Change `apiUrl` if the backend runs on a different port or host.
+
+---
+
+## 🖼️ Screenshots
+
+<!-- TODO: add screenshots/GIF of home, movie detail, login/register and admin panel -->
 
 ---
 
@@ -136,7 +138,7 @@ POST /api/v1/auth/authenticate  →  { token: "eyJhbGci..." }
 
 ## 📡 API consumed
 
-This app talks to the [CineAPI backend](https://github.com/EstebanMM13/CineAPI) through the API Gateway at port `8060`.
+This app talks to the [cineo-api](https://github.com/EstebanMM13/cineo-api) backend through the API Gateway at port `8060`.
 
 | Service | Endpoints used |
 |---|---|
@@ -165,10 +167,10 @@ This app talks to the [CineAPI backend](https://github.com/EstebanMM13/CineAPI) 
 
 ## 🔗 Related
 
-→ [CineAPI Backend](https://github.com/EstebanMM13/CineAPI) — Spring Cloud microservices REST API
+→ [cineo-api](https://github.com/EstebanMM13/cineo-api) — Spring Cloud microservices REST API
 
 ---
 
 ## 👨‍💻 Author
 
-**Esteban** — [@EstebanMM13](https://github.com/EstebanMM13)
+**Esteban** — [@estebanmm13](https://github.com/estebanmm13)
