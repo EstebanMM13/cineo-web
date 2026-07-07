@@ -22,8 +22,6 @@ The app uses **RxJS** for async data flows, **Angular Signals** for local compon
 
 ---
 
----
-
 ## 🖼️ Screenshots
 
 | Home | Movie detail — ratings & reviews |
