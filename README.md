@@ -22,6 +22,21 @@ The app uses **RxJS** for async data flows, **Angular Signals** for local compon
 
 ---
 
+---
+
+## 🖼️ Screenshots
+
+| Home | Movie detail — ratings & reviews |
+|---|---|
+| ![Home](docs/screenshots/home.png) | ![Movie detail](docs/screenshots/movie-detail.png) |
+
+| Login | Admin panel |
+|---|---|
+| ![Login](docs/screenshots/login.png) | ![Admin panel](docs/screenshots/admin-panel.png) |
+
+---
+
+
 ## ✨ Features
 
 - Real-time movie search with live navigation
@@ -88,20 +103,6 @@ export const environment = {
 ```
 
 Change `apiUrl` if the backend runs on a different port or host.
-
----
-
-## 🖼️ Screenshots
-
-| Home | Movie detail — ratings & reviews |
-|---|---|
-| ![Home](docs/screenshots/home.png) | ![Movie detail](docs/screenshots/movie-detail.png) |
-
-| Login | Admin panel |
-|---|---|
-| ![Login](docs/screenshots/login.png) | ![Admin panel](docs/screenshots/admin-panel.png) |
-
----
 
 ## 📁 Project Structure
 
