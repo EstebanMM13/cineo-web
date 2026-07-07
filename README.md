@@ -93,7 +93,13 @@ Change `apiUrl` if the backend runs on a different port or host.
 
 ## 🖼️ Screenshots
 
-<!-- TODO: add screenshots/GIF of home, movie detail, login/register and admin panel -->
+| Home | Movie detail — ratings & reviews |
+|---|---|
+| ![Home](docs/screenshots/home.png) | ![Movie detail](docs/screenshots/movie-detail.png) |
+
+| Login | Admin panel |
+|---|---|
+| ![Login](docs/screenshots/login.png) | ![Admin panel](docs/screenshots/admin-panel.png) |
 
 ---
 
